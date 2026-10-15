@@ -2,7 +2,7 @@ name: Deploy docs
 
 on:
   push:
-    branches: [ main ]   # ana dalınız farklıysa bunu değiştirin
+    branches: [ main ]
 
 jobs:
   build-and-deploy:
@@ -12,20 +12,21 @@ jobs:
       pages: write
       id-token: write
 
-      steps:
-      - uses: actions/checkout@v4
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      - name: Setup pnpm (install & add to PATH)
+      - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: latest    # veya belirli bir sürüm: '8' / '9.24.0' vb.
+          version: latest
 
-      - name: Verify pnpm
+      - name: Verify pnpm & node
         run: |
           pnpm -v
           node -v
@@ -34,19 +35,17 @@ jobs:
         run: pnpm approve-builds --all --yes
 
       - name: Install dependencies
-        run: pnpm install      
-        
+        run: pnpm install
+
       - name: Build docs
-        run: |
-          # Eğer package.json'daki name @myorg/docs ise filtre kullanın
-          pnpm --filter @myorg/docs run build
-          # Alternatif: cd apps/docs && pnpm run build
+        # Eğer package.json'daki name @myorg/docs ise filtre kullanın; değilse alternatif olarak cd apps/docs && pnpm run build kullanın.
+        run: pnpm --filter @myorg/docs run build
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v3
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v2
         with:
           path: apps/docs/docs/.vitepress/dist
 
