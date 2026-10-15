@@ -38,7 +38,7 @@ jobs:
         run: pnpm install
 
       - name: Build docs
-        # Eğer package.json'daki name @myorg/docs ise filtre kullanın; değilse alternatif olarak cd apps/docs && pnpm run build kullanın.
+        # Eğer package.json'daki name @myorg/docs değilse burayı cd apps/docs && pnpm run build ile değiştirin
         run: pnpm --filter @myorg/docs run build
 
       - name: Configure GitHub Pages
@@ -50,4 +50,4 @@ jobs:
           path: apps/docs/docs/.vitepress/dist
 
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
