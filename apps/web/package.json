@@ -1,0 +1,13 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@myorg/shared-types": "workspace:*",
+    "node-fetch": "^3.3.1"
+  }
+}

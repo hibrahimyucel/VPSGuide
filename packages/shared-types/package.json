@@ -1,0 +1,11 @@
+{
+  "name": "@myorg/shared-types",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "private": false,
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist"
+  }
+}
