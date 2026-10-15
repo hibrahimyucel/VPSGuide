@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu 26
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       pages: write
@@ -21,15 +21,10 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-
-      - name: Verify pnpm & node
+      - name: Enable corepack
         run: |
-          pnpm -v
-          node -v
+          corepack enable
+          corepack prepare pnpm@latest --activate
 
       - name: Approve pnpm build scripts
         run: pnpm approve-builds --all --yes
@@ -38,16 +33,15 @@ jobs:
         run: pnpm install
 
       - name: Build docs
-        # Eğer package.json'daki name @myorg/docs değilse burayı cd apps/docs && pnpm run build ile değiştirin
         run: pnpm --filter @myorg/docs run build
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v3
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v1
         with:
           path: apps/docs/docs/.vitepress/dist
 
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v1
