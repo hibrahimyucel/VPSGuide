@@ -2,7 +2,7 @@ name: Deploy docs
 
 on:
   push:
-    branches: [ main ]   # eğer farklı bir branch kullanıyorsanız burayı değiştirin
+    branches: [ main ]   # ana dalınız farklıysa bunu değiştirin
 
 jobs:
   build-and-deploy:
@@ -26,20 +26,17 @@ jobs:
           corepack enable
           corepack prepare pnpm@latest --activate
 
-      - name: Approve pnpm build scripts (for esbuild etc.)
+      - name: Approve pnpm build scripts
         run: pnpm approve-builds --all --yes
 
       - name: Install dependencies
         run: pnpm install
 
       - name: Build docs
-        # Paket isminiz package.json'daki "name" alanına göre değişebilir.
-        # Eğer @myorg/docs ise aşağıdaki filtre uygundur; değilse cd'leyip build yapın.
-        run: pnpm --filter @myorg/docs run build
-        # Alternatif (package name farklý ise):
-        # run: |
-        #   cd apps/docs
-        #   pnpm run build
+        run: |
+          # Eğer package.json'daki name @myorg/docs ise filtre kullanın
+          pnpm --filter @myorg/docs run build
+          # Alternatif: cd apps/docs && pnpm run build
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v3
