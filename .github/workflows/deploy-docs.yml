@@ -12,26 +12,30 @@ jobs:
       pages: write
       id-token: write
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      steps:
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      - name: Enable corepack and prepare pnpm
+      - name: Setup pnpm (install & add to PATH)
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest    # veya belirli bir sürüm: '8' / '9.24.0' vb.
+
+      - name: Verify pnpm
         run: |
-          corepack enable
-          corepack prepare pnpm@latest --activate
+          pnpm -v
+          node -v
 
       - name: Approve pnpm build scripts
         run: pnpm approve-builds --all --yes
 
       - name: Install dependencies
-        run: pnpm install
-
+        run: pnpm install      
+        
       - name: Build docs
         run: |
           # Eğer package.json'daki name @myorg/docs ise filtre kullanın
